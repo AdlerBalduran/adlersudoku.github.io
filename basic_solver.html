@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>Sudoku – Naked Single Hint</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    td {
+      border: 1px solid #999;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+    }
+    input {
+      width: 38px;
+      height: 38px;
+      font-size: 20px;
+      text-align: center;
+      border: none;
+    }
+    /* hrubšie čiary medzi 3x3 blokmi */
+    tr:nth-child(3n) td {
+      border-bottom: 2px solid #000;
+    }
+    td:nth-child(3n) {
+      border-right: 2px solid #000;
+    }
+    tr:first-child td {
+      border-top: 2px solid #000;
+    }
+    td:first-child {
+      border-left: 2px solid #000;
+    }
+    .hint-cell {
+      background-color: #c8f7c5;
+      transition: background-color 0.6s ease;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Sudoku – Naked Single (Hint)</h2>
+
+<table id="sudoku">
+  <!-- riadky 0–8 -->
+  <tbody>
+    <!-- vygenerované staticky, ale pokojne môžeš neskôr generovať v JS -->
+    <!-- row 0 -->
+    <tr>
+      <td><input id="c-0-0" maxlength="1"></td>
+      <td><input id="c-0-1" maxlength="1"></td>
+      <td><input id="c-0-2" maxlength="1"></td>
+      <td><input id="c-0-3" maxlength="1"></td>
+      <td><input id="c-0-4" maxlength="1"></td>
+      <td><input id="c-0-5" maxlength="1"></td>
+      <td><input id="c-0-6" maxlength="1"></td>
+      <td><input id="c-0-7" maxlength="1"></td>
+      <td><input id="c-0-8" maxlength="1"></td>
+    </tr>
+    <!-- row 1 -->
+    <tr>
+      <td><input id="c-1-0" maxlength="1"></td>
+      <td><input id="c-1-1" maxlength="1"></td>
+      <td><input id="c-1-2" maxlength="1"></td>
+      <td><input id="c-1-3" maxlength="1"></td>
+      <td><input id="c-1-4" maxlength="1"></td>
+      <td><input id="c-1-5" maxlength="1"></td>
+      <td><input id="c-1-6" maxlength="1"></td>
+      <td><input id="c-1-7" maxlength="1"></td>
+      <td><input id="c-1-8" maxlength="1"></td>
+    </tr>
+    <!-- row 2 -->
+    <tr>
+      <td><input id="c-2-0" maxlength="1"></td>
+      <td><input id="c-2-1" maxlength="1"></td>
+      <td><input id="c-2-2" maxlength="1"></td>
+      <td><input id="c-2-3" maxlength="1"></td>
+      <td><input id="c-2-4" maxlength="1"></td>
+      <td><input id="c-2-5" maxlength="1"></td>
+      <td><input id="c-2-6" maxlength="1"></td>
+      <td><input id="c-2-7" maxlength="1"></td>
+      <td><input id="c-2-8" maxlength="1"></td>
+    </tr>
+    <!-- row 3 -->
+    <tr>
+      <td><input id="c-3-0" maxlength="1"></td>
+      <td><input id="c-3-1" maxlength="1"></td>
+      <td><input id="c-3-2" maxlength="1"></td>
+      <td><input id="c-3-3" maxlength="1"></td>
+      <td><input id="c-3-4" maxlength="1"></td>
+      <td><input id="c-3-5" maxlength="1"></td>
+      <td><input id="c-3-6" maxlength="1"></td>
+      <td><input id="c-3-7" maxlength="1"></td>
+      <td><input id="c-3-8" maxlength="1"></td>
+    </tr>
+    <!-- row 4 -->
+    <tr>
+      <td><input id="c-4-0" maxlength="1"></td>
+      <td><input id="c-4-1" maxlength="1"></td>
+      <td><input id="c-4-2" maxlength="1"></td>
+      <td><input id="c-4-3" maxlength="1"></td>
+      <td><input id="c-4-4" maxlength="1"></td>
+      <td><input id="c-4-5" maxlength="1"></td>
+      <td><input id="c-4-6" maxlength="1"></td>
+      <td><input id="c-4-7" maxlength="1"></td>
+      <td><input id="c-4-8" maxlength="1"></td>
+    </tr>
+    <!-- row 5 -->
+    <tr>
+      <td><input id="c-5-0" maxlength="1"></td>
+      <td><input id="c-5-1" maxlength="1"></td>
+      <td><input id="c-5-2" maxlength="1"></td>
+      <td><input id="c-5-3" maxlength="1"></td>
+      <td><input id="c-5-4" maxlength="1"></td>
+      <td><input id="c-5-5" maxlength="1"></td>
+      <td><input id="c-5-6" maxlength="1"></td>
+      <td><input id="c-5-7" maxlength="1"></td>
+      <td><input id="c-5-8" maxlength="1"></td>
+    </tr>
+    <!-- row 6 -->
+    <tr>
+      <td><input id="c-6-0" maxlength="1"></td>
+      <td><input id="c-6-1" maxlength="1"></td>
+      <td><input id="c-6-2" maxlength="1"></td>
+      <td><input id="c-6-3" maxlength="1"></td>
+      <td><input id="c-6-4" maxlength="1"></td>
+      <td><input id="c-6-5" maxlength="1"></td>
+      <td><input id="c-6-6" maxlength="1"></td>
+      <td><input id="c-6-7" maxlength="1"></td>
+      <td><input id="c-6-8" maxlength="1"></td>
+    </tr>
+    <!-- row 7 -->
+    <tr>
+      <td><input id="c-7-0" maxlength="1"></td>
+      <td><input id="c-7-1" maxlength="1"></td>
+      <td><input id="c-7-2" maxlength="1"></td>
+      <td><input id="c-7-3" maxlength="1"></td>
+      <td><input id="c-7-4" maxlength="1"></td>
+      <td><input id="c-7-5" maxlength="1"></td>
+      <td><input id="c-7-6" maxlength="1"></td>
+      <td><input id="c-7-7" maxlength="1"></td>
+      <td><input id="c-7-8" maxlength="1"></td>
+    </tr>
+    <!-- row 8 -->
+    <tr>
+      <td><input id="c-8-0" maxlength="1"></td>
+      <td><input id="c-8-1" maxlength="1"></td>
+      <td><input id="c-8-2" maxlength="1"></td>
+      <td><input id="c-8-3" maxlength="1"></td>
+      <td><input id="c-8-4" maxlength="1"></td>
+      <td><input id="c-8-5" maxlength="1"></td>
+      <td><input id="c-8-6" maxlength="1"></td>
+      <td><input id="c-8-7" maxlength="1"></td>
+      <td><input id="c-8-8" maxlength="1"></td>
+    </tr>
+  </tbody>
+</table>
+
+<button id="hintBtn">Hint (Naked Single)</button>
+<p id="status"></p>
+
+<script>
+  // Pomocná funkcia – načítanie mriežky do 2D poľa čísel / null
+  function getGrid() {
+    const grid = [];
+    for (let r = 0; r < 9; r++) {
+      grid[r] = [];
+      for (let c = 0; c < 9; c++) {
+        const val = document.getElementById(`c-${r}-${c}`).value;
+        const n = parseInt(val, 10);
+        grid[r][c] = (n >= 1 && n <= 9) ? n : null;
+      }
+    }
+    return grid;
+  }
+
+  // Získaj kandidátov pre danú bunku (r, c) podľa riadku, stĺpca a 3x3 bloku
+  function getCandidates(grid, r, c) {
+    if (grid[r][c] !== null) {
+      return []; // už je vyplnené
+    }
+
+    const forbidden = new Set();
+
+    // riadok
+    for (let cc = 0; cc < 9; cc++) {
+      if (grid[r][cc] !== null) forbidden.add(grid[r][cc]);
+    }
+    // stĺpec
+    for (let rr = 0; rr < 9; rr++) {
+      if (grid[rr][c] !== null) forbidden.add(grid[rr][c]);
+    }
+    // 3x3 blok
+    const br = Math.floor(r / 3) * 3;
+    const bc = Math.floor(c / 3) * 3;
+    for (let rr = br; rr < br + 3; rr++) {
+      for (let cc = bc; cc < bc + 3; cc++) {
+        if (grid[rr][cc] !== null) forbidden.add(grid[rr][cc]);
+      }
+    }
+
+    const candidates = [];
+    for (let n = 1; n <= 9; n++) {
+      if (!forbidden.has(n)) candidates.push(n);
+    }
+    return candidates;
+  }
+
+  // Nájde prvý Naked Single, vyplní ho a vráti true/false
+  function applyNakedSingle() {
+    const grid = getGrid();
+
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (grid[r][c] === null) {
+          const cand = getCandidates(grid, r, c);
+          if (cand.length === 1) {
+            const cell = document.getElementById(`c-${r}-${c}`);
+            cell.value = cand[0];
+
+            // vizuálne zvýraznenie
+            cell.classList.add("hint-cell");
+            setTimeout(() => cell.classList.remove("hint-cell"), 1800);
+
+            document.getElementById("status").textContent =
+              `Nájdený Naked Single v bunke (${r + 1}, ${c + 1}) = ${cand[0]}`;
+            return true;
+          }
+        }
+      }
+    }
+
+    document.getElementById("status").textContent =
+      "Žiadny Naked Single sa nenašiel.";
+    return false;
+  }
+
+  document.getElementById("hintBtn").addEventListener("click", applyNakedSingle);
+</script>
+
+</body>
+</html>
