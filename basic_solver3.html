@@ -320,7 +320,7 @@
   //base
   let isListenerBlocked = false;
 
-  const inputs = [...document.querySelectorAll('input')];
+  const inputs = [...document.querySelectorAll('#sudoku input')];
   
   //autofill
   const autoFillNumberButtons = document.querySelectorAll('.number-bar button')
@@ -415,10 +415,10 @@
   }
 
   function getCandidates(grid, r, c) {
-    if (grid[r][c] !== null) return [];
+    if ( !Number.isNaN(grid[r][c])) return [];
     const forbidden = new Set();
-    for (let cc = 0; cc < 9; cc++) if (grid[r][cc] !== null) forbidden.add(grid[r][cc]);
-    for (let rr = 0; rr < 9; rr++) if (grid[rr][c] !== null) forbidden.add(grid[rr][c]);
+    for (let cc = 0; cc < 9; cc++) if ( !Number.isNaN(grid[r][cc])) forbidden.add(grid[r][cc]);
+    for (let rr = 0; rr < 9; rr++) if ( !Number.isNaN(grid[rr][c] )) forbidden.add(grid[rr][c]);
     const br = Math.floor(r / 3) * 3, bc = Math.floor(c / 3) * 3;
     for (let rr = br; rr < br + 3; rr++) for (let cc = bc; cc < bc + 3; cc++) if (grid[rr][cc] !== null) forbidden.add(grid[rr][cc]);
     return [1,2,3,4,5,6,7,8,9].filter(n => !forbidden.has(n));
@@ -427,9 +427,13 @@
   function applyNakedSingle() {
     const grid = getGrid();
     for (let r = 0; r < 9; r++) {
+	  console.log( "1. Naked single candidate check riadok", r);
       for (let c = 0; c < 9; c++) {
-        if (grid[r][c] === null) {
+		console.log( "Ideme stlpec: %d hodnota v bunke teraz %d",c, grid[r][c] );
+        if ( Number.isNaN( grid[r][c] ) ) {
+
           const cand = getCandidates(grid, r, c);
+		  console.log( "2. Naked single candidate"); // row = %d, column = %d is %d", r, c, cand.length );
           if (cand.length === 1) {
             const cell = document.getElementById(`c-${r}-${c}`);
             cell.value = cand[0];
