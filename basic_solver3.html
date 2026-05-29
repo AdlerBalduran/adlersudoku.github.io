@@ -64,6 +64,15 @@
       width:100%; height:100%; border:0; outline:0; background:transparent; color:var(--text);
       font-size:clamp(1rem, 2.3vw, 1.35rem); text-align:center; font-weight:700; caret-color:var(--accent2);
     }
+	
+	.number-bar,
+	.bottom-actions {
+	  display: flex;
+	  flex-wrap: wrap;
+	  gap: 10px;
+	  margin: 20px 10px 20px;
+	}
+
     input:focus{background:var(--cellFocus); box-shadow:inset 0 0 0 2px rgba(124,58,237,.35)}
     tr:nth-child(3n) td{border-bottom:2px solid var(--strong)}
     td:nth-child(3n){border-right:2px solid var(--strong)}
@@ -259,7 +268,23 @@
         </tbody></table>
       </div>
 
-      <div class="side-panel">
+    </div>
+
+      <div class="side-panel" > <!-- style="display:inline-block;" -->
+	  
+		<div class="number-bar">
+			<label><input type="checkbox" id="autoFillNumber" name="scales" /></label>
+			<button id="preselect-number-1">1</button>
+			<button id="preselect-number-2">2</button>
+			<button id="preselect-number-3">3</button>
+			<button id="preselect-number-4">4</button>
+			<button id="preselect-number-5">5</button>
+			<button id="preselect-number-6">6</button>
+			<button id="preselect-number-7">7</button>
+			<button id="preselect-number-8">8</button>
+			<button id="preselect-number-9">9</button>
+		</div>
+
         <p id="status" class="status">Zadaj čísla a klikni na Hint.</p>
 
         <div id="countsWrap" class="counts-wrap">
@@ -284,7 +309,6 @@
           </table>
         </div>
       </div>
-    </div>
 
     <div class="legend">
       <span class="pill">3x3 bloky sú zvýraznené hrubšou čiarou</span>
@@ -293,7 +317,15 @@
   </main>
 
 <script>
+  //base
+  let isListenerBlocked = false;
+
   const inputs = [...document.querySelectorAll('input')];
+  
+  //autofill
+  const autoFillNumberButtons = document.querySelectorAll('.number-bar button')
+  const autoFillNumber = document.querySelector('#autoFillNumber');
+  let autofill_current_number = '1';
 
   function updateCounts() {
     const counts = Array(10).fill(0);
@@ -306,18 +338,63 @@
       if (el) el.textContent = counts[n];
     }
   }
+  
+  function moveToRightInGrid(i) {
+    isListenerBlocked = true;
+    inputs[Math.min(i+1, inputs.length-1)].focus();
+	isListenerBlocked = false;
+  }
 
   inputs.forEach((el, i) => {
     el.addEventListener('input', () => {
       el.value = el.value.replace(/[^1-9]/g, '').slice(0,1);
       updateCounts();
+	  //skok na dalsi element(bud doprava alebo dolu)
+	  console.log( "Skok na dalsi element, index teraz", i );
+	  moveToRightInGrid( i );
     });
     el.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight') inputs[Math.min(i+1, inputs.length-1)].focus();
+      if (e.key === 'ArrowRight') moveToRightInGrid(i);
       if (e.key === 'ArrowLeft') inputs[Math.max(i-1, 0)].focus();
       if (e.key === 'ArrowDown') document.getElementById(`c-${Math.min(8, (+el.id.split('-')[1]||0)+1)}-${el.id.split('-')[2]}`).focus();
       if (e.key === 'ArrowUp') document.getElementById(`c-${Math.max(0, (+el.id.split('-')[1]||0)-1)}-${el.id.split('-')[2]}`).focus();
     });
+	
+	//focus
+	el.addEventListener("focus", function() {
+
+		if ( !isListenerBlocked ) {
+			if ( autoFillNumber.checked ) {
+				//console.log("Focused element:", el);
+				el.value = autofill_current_number;
+				updateCounts();
+			};
+		};
+	});
+  });
+  
+  //autofill
+  function toggle_number_color_in_grid( number_to_toggle, is_red ) {
+	  const sudokuTable = document.getElementById('sudoku');
+	  if (!sudokuTable) return;
+
+	  const inputs = sudokuTable.querySelectorAll('input');
+	  inputs.forEach(input => {
+	    if ( input.value === number_to_toggle ) {
+			input.style.color = ( is_red ? 'red' : 'white' );
+		}
+	  });
+  };
+
+  autoFillNumberButtons.forEach((el, i) => {
+    el.addEventListener('click', () => {
+	  //console.log( "Clicked auto fill number button:", el );
+	  autofill_current_number = el.textContent;
+	  el.style.color = ( el.style.color == 'red' ? 'white' : 'red' );
+	  
+	  //nafarbickujeme aktualne cislo, ak uz nafarbickovane je tak nafarbickovanie zrusime
+	  toggle_number_color_in_grid( autofill_current_number, el.style.color == 'red' );
+	});
   });
 
   function getGrid() {
@@ -412,7 +489,12 @@
 
   document.getElementById('fileInput').addEventListener('change', async (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    if (!file) {
+	
+	  console.error( "Subor sa nepodarilo nacitat, asi blocked by browser alebo system!" );
+	  log_status( "Súbor sa nepodarilo načítať, asi blocked by browser alebo system!", true );
+	  return;
+	};
 
     try {
       const text = await file.text();
@@ -480,9 +562,15 @@
     } else {
       status.textContent = `Konflikt: ${res.where} nie je validný!`;
       status.style.color = 'var(--danger)';
-	  console.log("Chybny grid elementy vsetky: ", grid);
+	  console.log("Chybne grid elementy vsetky: ", grid);
     }
     updateCounts();
+  }
+  
+  function log_status( status_log_text, is_error ) {
+    const status = document.getElementById('status');
+	status.textContent = status_log_text;
+    status.style.color = (is_error ? 'var(--danger)' : 'var(--accent2)');
   }
 
   updateCounts();
