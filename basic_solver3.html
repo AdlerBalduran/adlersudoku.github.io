@@ -143,6 +143,19 @@
     }
     .upload-btn:hover{transform:translateY(-1px); filter:brightness(1.06)}
     .upload-btn input{display:none}
+    .cell-wrapper{
+      position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    }
+    .candidates{
+      position:absolute; top:0; left:0; width:100%; height:100%; display:grid; grid-template-columns:repeat(3,1fr);
+      grid-template-rows:repeat(3,1fr); gap:0; padding:2px; pointer-events:none; background:transparent;
+    }
+    .candidates.hidden{display:none}
+    .candidate{
+      font-size:clamp(0.5rem,1.2vw,0.7rem); color:rgba(148,163,184,.55); text-align:center;
+      display:flex; align-items:center; justify-content:center; line-height:1;
+    }
+    input.invalid{color:var(--danger); font-weight:700}
   </style>
 </head>
 <body>
@@ -155,6 +168,7 @@
       <div class="actions">
         <button id="hintBtn">Hint</button>
         <button class="secondary" id="checkBtn" type="button">Validácia</button>
+        <button class="secondary" id="toggleCandidatesBtn" type="button">Kandidáti</button>
         <button class="secondary" id="clearBtn" type="button">Vymazať</button>
         <label class="secondary upload-btn">
           Načítať JSON
@@ -167,103 +181,103 @@
       <div class="board-wrap">
         <table id="sudoku"><tbody>
           <tr>
-            <td><input id="c-0-0" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-0-1" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-0-2" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-0-3" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-0-4" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-0-5" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-0-6" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-0-7" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-0-8" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
+            <td><div class="cell-wrapper"><input id="c-0-0" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-0-0"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-0-1" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-0-1"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-0-2" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-0-2"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-0-3" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-0-3"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-0-4" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-0-4"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-0-5" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-0-5"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-0-6" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-0-6"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-0-7" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-0-7"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-0-8" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-0-8"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
           </tr>
           <tr>
-            <td><input id="c-1-0" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-1-1" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-1-2" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-1-3" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-1-4" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-1-5" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-1-6" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-1-7" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-1-8" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
+            <td><div class="cell-wrapper"><input id="c-1-0" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-1-0"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-1-1" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-1-1"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-1-2" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-1-2"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-1-3" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-1-3"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-1-4" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-1-4"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-1-5" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-1-5"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-1-6" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-1-6"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-1-7" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-1-7"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-1-8" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-1-8"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
           </tr>
           <tr>
-            <td><input id="c-2-0" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-2-1" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-2-2" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-2-3" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-2-4" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-2-5" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-2-6" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-2-7" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-2-8" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
+            <td><div class="cell-wrapper"><input id="c-2-0" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-2-0"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-2-1" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-2-1"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-2-2" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-2-2"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-2-3" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-2-3"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-2-4" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-2-4"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-2-5" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-2-5"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-2-6" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-2-6"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-2-7" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-2-7"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-2-8" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-2-8"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
           </tr>
           <tr>
-            <td><input id="c-3-0" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-3-1" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-3-2" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-3-3" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-3-4" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-3-5" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-3-6" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-3-7" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-3-8" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
+            <td><div class="cell-wrapper"><input id="c-3-0" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-3-0"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-3-1" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-3-1"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-3-2" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-3-2"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-3-3" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-3-3"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-3-4" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-3-4"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-3-5" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-3-5"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-3-6" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-3-6"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-3-7" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-3-7"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-3-8" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-3-8"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
           </tr>
           <tr>
-            <td><input id="c-4-0" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-4-1" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-4-2" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-4-3" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-4-4" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-4-5" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-4-6" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-4-7" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-4-8" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
+            <td><div class="cell-wrapper"><input id="c-4-0" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-4-0"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-4-1" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-4-1"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-4-2" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-4-2"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-4-3" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-4-3"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-4-4" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-4-4"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-4-5" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-4-5"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-4-6" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-4-6"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-4-7" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-4-7"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-4-8" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-4-8"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
           </tr>
           <tr>
-            <td><input id="c-5-0" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-5-1" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-5-2" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-5-3" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-5-4" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-5-5" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-5-6" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-5-7" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-5-8" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
+            <td><div class="cell-wrapper"><input id="c-5-0" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-5-0"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-5-1" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-5-1"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-5-2" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-5-2"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-5-3" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-5-3"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-5-4" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-5-4"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-5-5" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-5-5"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-5-6" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-5-6"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-5-7" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-5-7"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-5-8" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-5-8"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
           </tr>
           <tr>
-            <td><input id="c-6-0" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-6-1" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-6-2" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-6-3" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-6-4" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-6-5" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-6-6" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-6-7" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-6-8" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
+            <td><div class="cell-wrapper"><input id="c-6-0" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-6-0"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-6-1" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-6-1"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-6-2" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-6-2"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-6-3" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-6-3"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-6-4" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-6-4"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-6-5" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-6-5"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-6-6" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-6-6"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-6-7" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-6-7"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-6-8" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-6-8"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
           </tr>
           <tr>
-            <td><input id="c-7-0" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-7-1" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-7-2" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-7-3" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-7-4" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-7-5" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-7-6" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-7-7" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-7-8" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
+            <td><div class="cell-wrapper"><input id="c-7-0" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-7-0"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-7-1" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-7-1"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-7-2" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-7-2"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-7-3" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-7-3"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-7-4" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-7-4"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-7-5" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-7-5"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-7-6" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-7-6"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-7-7" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-7-7"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-7-8" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-7-8"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
           </tr>
           <tr>
-            <td><input id="c-8-0" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-8-1" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-8-2" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-8-3" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-8-4" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-8-5" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-8-6" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-8-7" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
-            <td><input id="c-8-8" maxlength="1" inputmode="numeric" pattern="[1-9]"></td>
+            <td><div class="cell-wrapper"><input id="c-8-0" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-8-0"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-8-1" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-8-1"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-8-2" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-8-2"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-8-3" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-8-3"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-8-4" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-8-4"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-8-5" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-8-5"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-8-6" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-8-6"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-8-7" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-8-7"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
+            <td><div class="cell-wrapper"><input id="c-8-8" maxlength="1" inputmode="numeric" pattern="[1-9]"><div class="candidates hidden" id="cand-8-8"><div class="candidate">1</div><div class="candidate">2</div><div class="candidate">3</div><div class="candidate">4</div><div class="candidate">5</div><div class="candidate">6</div><div class="candidate">7</div><div class="candidate">8</div><div class="candidate">9</div></div></div></td>
           </tr>
         </tbody></table>
       </div>
@@ -337,6 +351,7 @@
       const el = document.getElementById(`count-${n}`);
       if (el) el.textContent = counts[n];
     }
+    updateAllCandidates();
   }
   
   function moveToRightInGrid(i) {
@@ -345,9 +360,94 @@
 	isListenerBlocked = false;
   }
 
+  function validateCell(inputEl) {
+    const id = inputEl.id;
+    const [r, c] = [parseInt(id.split('-')[1]), parseInt(id.split('-')[2])];
+    const value = parseInt(inputEl.value, 10);
+
+    if (!inputEl.value || Number.isNaN(value)) {
+      inputEl.classList.remove('invalid');
+      return;
+    }
+
+    const grid = getGrid();
+    let hasError = false;
+
+    // Check row for duplicates
+    for (let cc = 0; cc < 9; cc++) {
+      if (cc !== c && grid[r][cc] === value) {
+        hasError = true;
+        break;
+      }
+    }
+
+    // Check column for duplicates
+    if (!hasError) {
+      for (let rr = 0; rr < 9; rr++) {
+        if (rr !== r && grid[rr][c] === value) {
+          hasError = true;
+          break;
+        }
+      }
+    }
+
+    // Check 3x3 block for duplicates
+    if (!hasError) {
+      const br = Math.floor(r / 3) * 3, bc = Math.floor(c / 3) * 3;
+      for (let rr = br; rr < br + 3; rr++) {
+        for (let cc = bc; cc < bc + 3; cc++) {
+          if ((rr !== r || cc !== c) && grid[rr][cc] === value) {
+            hasError = true;
+            break;
+          }
+        }
+        if (hasError) break;
+      }
+    }
+
+    if (hasError) {
+      inputEl.classList.add('invalid');
+    } else {
+      inputEl.classList.remove('invalid');
+    }
+  }
+
+  function canSeeBoth(r, c, roof1r, roof1c, roof2r, roof2c) {
+    // Cell (r,c) sees roof1 (roof1r, roof1c) if same row, column, or 3x3 box
+    const seesRoof1 = (r === roof1r) || (c === roof1c) ||
+                      (Math.floor(r/3) === Math.floor(roof1r/3) && Math.floor(c/3) === Math.floor(roof1c/3));
+
+    // Cell (r,c) sees roof2 (roof2r, roof2c) if same row, column, or 3x3 box
+    const seesRoof2 = (r === roof2r) || (c === roof2c) ||
+                      (Math.floor(r/3) === Math.floor(roof2r/3) && Math.floor(c/3) === Math.floor(roof2c/3));
+
+    return seesRoof1 && seesRoof2;
+  }
+
   inputs.forEach((el, i) => {
     el.addEventListener('input', () => {
       el.value = el.value.replace(/[^1-9]/g, '').slice(0,1);
+
+      validateCell(el);
+
+      // Also validate cells in same row, column, and block
+      const id = el.id;
+      const [r, c] = [parseInt(id.split('-')[1]), parseInt(id.split('-')[2])];
+
+      for (let cc = 0; cc < 9; cc++) {
+        if (cc !== c) validateCell(document.getElementById(`c-${r}-${cc}`));
+      }
+      for (let rr = 0; rr < 9; rr++) {
+        if (rr !== r) validateCell(document.getElementById(`c-${rr}-${c}`));
+      }
+
+      const br = Math.floor(r / 3) * 3, bc = Math.floor(c / 3) * 3;
+      for (let rr = br; rr < br + 3; rr++) {
+        for (let cc = bc; cc < bc + 3; cc++) {
+          if (rr !== r || cc !== c) validateCell(document.getElementById(`c-${rr}-${cc}`));
+        }
+      }
+
       updateCounts();
 	  //skok na dalsi element(bud doprava alebo dolu)
 	  console.log( "Skok na dalsi element, index teraz", i );
@@ -379,21 +479,73 @@
 	  if (!sudokuTable) return;
 
 	  const inputs = sudokuTable.querySelectorAll('input');
-	  inputs.forEach(input => {
-	    if ( input.value === number_to_toggle ) {
-			input.style.color = ( is_red ? 'red' : 'white' );
-		}
-	  });
+
+	  if (is_red) {
+		  // Validate and paint - green if valid, red if error
+		  const grid = getGrid();
+		  inputs.forEach(input => {
+			  if (input.value === number_to_toggle) {
+				  const id = input.id; // c-r-c
+				  const [r, c] = [parseInt(id.split('-')[1]), parseInt(id.split('-')[2])];
+
+				  let hasError = false;
+				  // Check row
+				  for (let cc = 0; cc < 9; cc++) {
+					  if (cc !== c && grid[r][cc] === parseInt(number_to_toggle)) {
+						  hasError = true;
+						  break;
+					  }
+				  }
+				  // Check column
+				  if (!hasError) {
+					  for (let rr = 0; rr < 9; rr++) {
+						  if (rr !== r && grid[rr][c] === parseInt(number_to_toggle)) {
+							  hasError = true;
+							  break;
+						  }
+					  }
+				  }
+				  // Check 3x3 block
+				  if (!hasError) {
+					  const br = Math.floor(r / 3) * 3, bc = Math.floor(c / 3) * 3;
+					  for (let rr = br; rr < br + 3; rr++) {
+						  for (let cc = bc; cc < bc + 3; cc++) {
+							  if ((rr !== r || cc !== c) && grid[rr][cc] === parseInt(number_to_toggle)) {
+								  hasError = true;
+								  break;
+							  }
+						  }
+						  if (hasError) break;
+					  }
+				  }
+
+				  input.style.color = hasError ? 'red' : 'green';
+			  }
+		  });
+	  } else {
+		  // Unpaint - back to white
+		  inputs.forEach(input => {
+			  if (input.value === number_to_toggle) {
+				  input.style.color = 'white';
+			  }
+		  });
+	  }
   };
 
   autoFillNumberButtons.forEach((el, i) => {
     el.addEventListener('click', () => {
-	  //console.log( "Clicked auto fill number button:", el );
 	  autofill_current_number = el.textContent;
-	  el.style.color = ( el.style.color == 'red' ? 'white' : 'red' );
-	  
-	  //nafarbickujeme aktualne cislo, ak uz nafarbickovane je tak nafarbickovanie zrusime
-	  toggle_number_color_in_grid( autofill_current_number, el.style.color == 'red' );
+	  const isCurrentlyPainted = el.style.color === 'green' || el.style.color === 'red';
+
+	  if (isCurrentlyPainted) {
+		  // Unpaint
+		  el.style.color = 'white';
+		  toggle_number_color_in_grid(autofill_current_number, false);
+	  } else {
+		  // Paint (green or red depending on validity)
+		  el.style.color = 'green';
+		  toggle_number_color_in_grid(autofill_current_number, true);
+	  }
 	});
   });
 
@@ -404,7 +556,7 @@
       for (let c = 0; c < 9; c++) {
         const val = document.getElementById(`c-${r}-${c}`).value;
         const n = parseInt(val, 10);
-        if (n < 1 || n > 9) {
+        if (Number.isNaN(n) || n < 1 || n > 9) {
           grid[r][c] = null;
         } else {
           grid[r][c] = n;
@@ -414,61 +566,284 @@
     return grid;
   }
 
-  function getCandidates(grid, r, c) {
-    if ( !Number.isNaN(grid[r][c])) return [];
+  function displayCandidatesForCell(r, c, grid) {
+    const candDiv = document.getElementById(`cand-${r}-${c}`);
+    if (!candDiv) return;
+
+    const cellValue = grid[r][c];
+    if (cellValue !== null) {
+      candDiv.classList.add('hidden');
+      return;
+    }
+
+    const candidates = getNakedSingleCandidates(grid, r, c);
+    const candElements = candDiv.querySelectorAll('.candidate');
+    candElements.forEach(el => {
+      const num = parseInt(el.textContent);
+      el.style.opacity = candidates.includes(num) ? '1' : '0.2';
+    });
+
+    candDiv.classList.remove('hidden');
+  }
+
+  function updateAllCandidates() {
+    const grid = getGrid();
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        displayCandidatesForCell(r, c, grid);
+      }
+    }
+  }
+
+  function toggleCandidatesDisplay() {
+    const candDivs = document.querySelectorAll('.candidates');
+    const allHidden = Array.from(candDivs).every(div => div.classList.contains('hidden'));
+
+    if (allHidden) {
+      candDivs.forEach(div => div.classList.remove('hidden'));
+      updateAllCandidates();
+    } else {
+      candDivs.forEach(div => div.classList.add('hidden'));
+    }
+  }
+  function getNakedSingleCandidates(grid, r, c) {
+    if (grid[r][c] != null) return [];
+
     const forbidden = new Set();
-    for (let cc = 0; cc < 9; cc++) if ( !Number.isNaN(grid[r][cc])) forbidden.add(grid[r][cc]);
-    for (let rr = 0; rr < 9; rr++) if ( !Number.isNaN(grid[rr][c] )) forbidden.add(grid[rr][c]);
+    for (let cc = 0; cc < 9; cc++) if (grid[r][cc] != null) forbidden.add(grid[r][cc]);
+    for (let rr = 0; rr < 9; rr++) if (grid[rr][c] != null) forbidden.add(grid[rr][c]);
     const br = Math.floor(r / 3) * 3, bc = Math.floor(c / 3) * 3;
-    for (let rr = br; rr < br + 3; rr++) for (let cc = bc; cc < bc + 3; cc++) if (grid[rr][cc] !== null) forbidden.add(grid[rr][cc]);
+    for (let rr = br; rr < br + 3; rr++) for (let cc = bc; cc < bc + 3; cc++) if (grid[rr][cc] != null) forbidden.add(grid[rr][cc]);
     return [1,2,3,4,5,6,7,8,9].filter(n => !forbidden.has(n));
+  }
+
+  function applySkyscraper() {
+    const grid = getGrid();
+    console.log("=== SKYSCRAPER DEBUG ===");
+    console.log("Grid:", grid);
+
+    for (let digit = 1; digit <= 9; digit++) {
+      // Find columns where digit appears exactly twice
+      const colsWithTwo = [];
+
+      for (let c = 0; c < 9; c++) {
+        const rows = [];
+        for (let r = 0; r < 9; r++) {
+          if (grid[r][c] === null && getNakedSingleCandidates(grid, r, c).includes(digit)) {
+            rows.push(r);
+          }
+        }
+        if (rows.length === 2) {
+          colsWithTwo.push({ c, rows });
+          if (digit === 1) console.log(`Column ${c} (${String.fromCharCode(65+c)}): rows ${rows} have digit 1`);
+        }
+      }
+
+      if (digit === 1) console.log(`Digit 1 - Columns with exactly 2 candidates:`, colsWithTwo);
+
+      // Look for Skyscraper: two columns that share exactly one row (base)
+      for (let i = 0; i < colsWithTwo.length; i++) {
+        for (let j = i + 1; j < colsWithTwo.length; j++) {
+          const col1 = colsWithTwo[i];
+          const col2 = colsWithTwo[j];
+          const rows1 = col1.rows;
+          const rows2 = col2.rows;
+
+          // Find shared row (base)
+          const sharedRows = rows1.filter(r => rows2.includes(r));
+
+          if (digit === 1) console.log(`Checking columns ${String.fromCharCode(65+col1.c)} and ${String.fromCharCode(65+col2.c)}: rows1=${rows1}, rows2=${rows2}, shared=${sharedRows}`);
+
+          if (sharedRows.length === 1) {
+            const baseRow = sharedRows[0];
+            const roof1Row = rows1.find(r => r !== baseRow);
+            const roof2Row = rows2.find(r => r !== baseRow);
+
+            if (digit === 1) console.log(`Found pattern! Base row ${baseRow}, roof rows ${roof1Row} and ${roof2Row}`);
+
+            let eliminatedCount = 0;
+
+            // Find cells that can see both roof cells
+            for (let r = 0; r < 9; r++) {
+              for (let c = 0; c < 9; c++) {
+                if (grid[r][c] === null) {
+                  const sees = canSeeBoth(r, c, roof1Row, col1.c, roof2Row, col2.c);
+                  if (sees) {
+                    const candidates = getNakedSingleCandidates(grid, r, c);
+                    if (digit === 1 && candidates.includes(digit)) {
+                      console.log(`Cell (${r},${c}) sees both roofs, has candidates:`, candidates);
+                    }
+                    if (candidates.includes(digit)) {
+                      const candDiv = document.getElementById(`cand-${r}-${c}`);
+                      if (candDiv) {
+                        const candElements = candDiv.querySelectorAll('.candidate');
+                        let wasMarked = false;
+                        candElements.forEach(el => {
+                          if (el.textContent === digit.toString()) {
+                            if (el.style.opacity === '0.1') {
+                              wasMarked = true;
+                              return;
+                            }
+                            el.style.opacity = '0.1';
+                            el.style.textDecoration = 'line-through';
+                          }
+                        });
+                        if (!wasMarked) eliminatedCount++;
+                      } else {
+                        eliminatedCount++;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            if (eliminatedCount > 0) {
+              console.log(`Skyscraper found: digit ${digit}, cols ${col1.c + 1} and ${col2.c + 1}`);
+              setStatus(`Skyscraper nájdené! Číslica: ${digit}. Eliminovaných: ${eliminatedCount}`);
+              return true;
+            }
+          }
+        }
+      }
+
+      // Also check ROW-based Skyscraper
+      const rowsWithTwo = [];
+
+      for (let r = 0; r < 9; r++) {
+        const cols = [];
+        for (let c = 0; c < 9; c++) {
+          if (grid[r][c] === null && getNakedSingleCandidates(grid, r, c).includes(digit)) {
+            cols.push(c);
+          }
+        }
+        if (cols.length === 2) {
+          rowsWithTwo.push({ r, cols });
+          if (digit === 1) console.log(`Row ${r}: cols ${cols} have digit 1`);
+        }
+      }
+
+      if (digit === 1) console.log(`Digit 1 - Rows with exactly 2 candidates:`, rowsWithTwo);
+
+      // Look for Skyscraper: two rows that share exactly one column (base)
+      for (let i = 0; i < rowsWithTwo.length; i++) {
+        for (let j = i + 1; j < rowsWithTwo.length; j++) {
+          const row1 = rowsWithTwo[i];
+          const row2 = rowsWithTwo[j];
+          const cols1 = row1.cols;
+          const cols2 = row2.cols;
+
+          // Find shared column (base)
+          const sharedCols = cols1.filter(c => cols2.includes(c));
+
+          if (digit === 1) console.log(`Checking rows ${row1.r} and ${row2.r}: cols1=${cols1}, cols2=${cols2}, shared=${sharedCols}`);
+
+          if (sharedCols.length === 1) {
+            const baseCol = sharedCols[0];
+            const roof1Col = cols1.find(c => c !== baseCol);
+            const roof2Col = cols2.find(c => c !== baseCol);
+
+            if (digit === 1) console.log(`Found pattern! Base col ${baseCol}, roof cols ${roof1Col} and ${roof2Col}`);
+
+            let eliminatedCount = 0;
+
+            // Find cells that can see both roof cells
+            for (let r = 0; r < 9; r++) {
+              for (let c = 0; c < 9; c++) {
+                if (grid[r][c] === null) {
+                  const sees = canSeeBoth(r, c, row1.r, roof1Col, row2.r, roof2Col);
+                  if (sees) {
+                    const candidates = getNakedSingleCandidates(grid, r, c);
+                    if (digit === 1 && candidates.includes(digit)) {
+                      console.log(`Cell (${r},${c}) sees both roofs, has candidates:`, candidates);
+                    }
+                    if (candidates.includes(digit)) {
+                      const candDiv = document.getElementById(`cand-${r}-${c}`);
+                      if (candDiv) {
+                        const candElements = candDiv.querySelectorAll('.candidate');
+                        let wasMarked = false;
+                        candElements.forEach(el => {
+                          if (el.textContent === digit.toString()) {
+                            if (el.style.opacity === '0.1') {
+                              wasMarked = true;
+                              return;
+                            }
+                            el.style.opacity = '0.1';
+                            el.style.textDecoration = 'line-through';
+                          }
+                        });
+                        if (!wasMarked) eliminatedCount++;
+                      } else {
+                        eliminatedCount++;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            if (eliminatedCount > 0) {
+              console.log(`Skyscraper found: digit ${digit}, rows ${row1.r + 1} and ${row2.r + 1}`);
+              setStatus(`Skyscraper nájdené! Číslica: ${digit}. Eliminovaných: ${eliminatedCount}`);
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   function applyNakedSingle() {
     const grid = getGrid();
     for (let r = 0; r < 9; r++) {
-	  console.log( "1. Naked single candidate check riadok", r);
       for (let c = 0; c < 9; c++) {
-		console.log( "Ideme stlpec: %d hodnota v bunke teraz %d",c, grid[r][c] );
-        if ( Number.isNaN( grid[r][c] ) ) {
-
-          const cand = getCandidates(grid, r, c);
-		  console.log( "2. Naked single candidate"); // row = %d, column = %d is %d", r, c, cand.length );
+        if (grid[r][c] === null) {
+          const cand = getNakedSingleCandidates(grid, r, c);
           if (cand.length === 1) {
             const cell = document.getElementById(`c-${r}-${c}`);
             cell.value = cand[0];
             cell.classList.add('hint-cell');
             setTimeout(() => cell.classList.remove('hint-cell'), 1800);
-            document.getElementById('status').textContent = `Nájdený Naked Single v bunke (${r + 1}, ${c + 1}) = ${cand[0]}`;
+            setStatus(`Nájdený Naked Single v bunke (${r + 1}, ${c + 1}) = ${cand[0]}`);
             updateCounts();
+            updateAllCandidates();
             return true;
           }
         }
       }
     }
-    document.getElementById('status').textContent = 'Žiadny Naked Single sa nenašiel.';
+
+    // No naked single found, try Skyscraper
+    if (applySkyscraper()) {
+      return true;
+    }
+
+    setStatus('Žiadny hint sa nenašiel.');
     return false;
   }
 
   function clearGrid() {
     inputs.forEach(i => i.value = '');
     updateCounts();
-    document.getElementById('status').textContent = 'Mriežka bola vymazaná.';
+    setStatus('Mriežka bola vymazaná.');
   }
 
   document.getElementById('hintBtn').addEventListener('click', applyNakedSingle);
   document.getElementById('checkBtn').addEventListener('click', checkSudoku);
+  document.getElementById('toggleCandidatesBtn').addEventListener('click', toggleCandidatesDisplay);
   document.getElementById('clearBtn').addEventListener('click', clearGrid);
   
   function setGridFromArray(data) {
     if (!Array.isArray(data) || data.length !== 9) {
-      document.getElementById('status').textContent = 'Neplatný JSON: očakávam 9 riadkov.';
+      setStatus('Neplatný JSON: očakávam 9 riadkov.', 0);
       return false;
     }
 
     for (let r = 0; r < 9; r++) {
       if (!Array.isArray(data[r]) || data[r].length !== 9) {
-        document.getElementById('status').textContent = `Neplatný JSON: riadok ${r + 1} nemá 9 hodnôt.`;
+        setStatus(`Neplatný JSON: riadok ${r + 1} nemá 9 hodnôt.`, 0);
         return false;
       }
       for (let c = 0; c < 9; c++) {
@@ -479,7 +854,7 @@
         } else if (Number.isInteger(v) && v >= 1 && v <= 9) {
           cell.value = String(v);
         } else {
-          document.getElementById('status').textContent = `Neplatná hodnota na pozícii (${r + 1}, ${c + 1}).`;
+          setStatus(`Neplatná hodnota na pozícii (${r + 1}, ${c + 1}).`, 0);
           return false;
         }
         cell.classList.remove('hint-cell');
@@ -487,7 +862,7 @@
     }
 
     updateCounts();
-    document.getElementById('status').textContent = 'JSON úspešne načítaný.';
+    setStatus('JSON úspešne načítaný.');
     return true;
   }
 
@@ -505,7 +880,7 @@
       const json = JSON.parse(text);
       setGridFromArray(json);
     } catch (err) {
-      document.getElementById('status').textContent = 'Nepodarilo sa načítať JSON súbor.';
+      setStatus('Nepodarilo sa načítať JSON súbor.', 0);
     }
 
     e.target.value = '';
@@ -514,7 +889,7 @@
   function isUnitValid(unit) {
     const seen = new Set();
     for (const v of unit) {
-      if (v === null || Number.isNaN(v)) continue;
+      if (v === null) continue;
       if (v < 1 || v > 9) return false;
       if (seen.has(v)) return false;
       seen.add(v);
@@ -571,10 +946,21 @@
     updateCounts();
   }
   
-  function log_status( status_log_text, is_error ) {
-    const status = document.getElementById('status');
-	status.textContent = status_log_text;
-    status.style.color = (is_error ? 'var(--danger)' : 'var(--accent2)');
+  let statusTimeout = null;
+
+  function setStatus(message, duration = 5000) {
+    const statusEl = document.getElementById('status');
+    statusEl.textContent = message;
+
+    // Clear any existing timeout
+    if (statusTimeout) clearTimeout(statusTimeout);
+
+    if (duration > 0) {
+      statusTimeout = setTimeout(() => {
+        statusEl.textContent = 'Zadaj čísla a klikni na Hint.';
+        statusTimeout = null;
+      }, duration);
+    }
   }
 
   updateCounts();
